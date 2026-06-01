@@ -157,9 +157,22 @@ summary::-webkit-details-marker{display:none}
      TAB 4: 設定
 ================================================== -->
 <div id="t4" style="display:none" class="fd">
+  <!-- AI URL設定（Cloudflare） -->
+  <div class="card" style="border:2px solid #0D9488">
+    <div style="font-weight:700;font-size:15px;color:#0D9488;margin-bottom:10px">🤖 AI URL設定（Cloudflare・必須）</div>
+    <div style="background:#F0FDFA;border-radius:8px;padding:10px 12px;font-size:13px;color:#0F766E;margin-bottom:12px;line-height:1.7">
+      <strong>用途：</strong>領収書のAI読み取り（iPhoneで確実に動く）<br>
+      Cloudflare Worker URL（例: https://ripple-ai.xxx.workers.dev）を貼り付け
+    </div>
+    <label style="font-size:12px;color:#6B7280;display:block;margin-bottom:6px">Cloudflare Worker URL</label>
+    <input type="url" id="aiInput" placeholder="https://ripple-ai.xxx.workers.dev" style="font-size:13px;margin-bottom:8px">
+    <button onclick="saveAI()" style="background:#0D9488;color:#fff;width:100%;padding:12px;font-size:14px;margin-bottom:6px">接続テスト＆保存</button>
+    <div id="aiMsg" style="font-size:13px;text-align:center;min-height:20px"></div>
+  </div>
+
   <!-- GAS設定 -->
   <div class="card" style="border:2px solid #065F46">
-    <div style="font-weight:700;font-size:15px;color:#065F46;margin-bottom:10px">⚙️ GAS URL設定（必須）</div>
+    <div style="font-weight:700;font-size:15px;color:#065F46;margin-bottom:10px">📊 GAS URL設定（書き込み用・必須）</div>
     <div style="background:#FFF7ED;border-radius:8px;padding:10px 12px;font-size:13px;color:#92400E;margin-bottom:12px;line-height:1.7">
       <strong>初回設定手順：</strong><br>
       1. GASスクリプトを開いてAPIキーとスプレッドシートIDを設定<br>
@@ -243,8 +256,8 @@ const DEF_SUP={
   'エープライス':'food','タイミー':'labor',
 };
 
-const SK='ripple_v10'; const SK_S='ripple_sup10'; const SK_G='ripple_gas10';
-let selShop=SHOPS[0].id, recs=[], pend=[], supDB={...DEF_SUP}, gasURL='';
+const SK='ripple_v10'; const SK_S='ripple_sup10'; const SK_G='ripple_gas10'; const SK_A='ripple_ai10';
+let selShop=SHOPS[0].id, recs=[], pend=[], supDB={...DEF_SUP}, gasURL='', aiURL='';
 
 // ================================================================
 // 初期化
@@ -255,6 +268,8 @@ let selShop=SHOPS[0].id, recs=[], pend=[], supDB={...DEF_SUP}, gasURL='';
     const s=JSON.parse(localStorage.getItem(SK_S)||'{}'); supDB=Object.assign({},DEF_SUP,s);
     gasURL=localStorage.getItem(SK_G)||'';
     if(gasURL) document.getElementById('gasInput').value=gasURL;
+    aiURL=localStorage.getItem(SK_A)||'';
+    setTimeout(()=>{const ai=document.getElementById('aiInput');if(ai&&aiURL)ai.value=aiURL;},100);
   }catch(e){}
   document.getElementById('mDate').value=new Date().toISOString().slice(0,10);
   renderShops();
@@ -383,12 +398,12 @@ function toJpeg(file){
 // GAS経由でAI読み取り
 // ================================================================
 async function callAI(file){
-  if(!gasURL) throw new Error('GAS URLが設定されていません。設定タブで設定してください。');
+  if(!aiURL) throw new Error('AI URL（Cloudflare）が設定されていません。設定タブで設定してください。');
   const img=await toJpeg(file);
-  const res=await fetch(gasURL,{
+  const res=await fetch(aiURL,{
     method:'POST',
-    headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify({action:'analyzeImage',imageB64:img.b64,mimeType:img.mt})
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({imageB64:img.b64,mimeType:img.mt})
   });
   if(!res.ok) throw new Error(`通信エラー(${res.status})`);
   const data=await res.json();
@@ -695,6 +710,30 @@ function drawSum(){
 // ================================================================
 // GAS設定
 // ================================================================
+async function saveAI(){
+  const url=document.getElementById('aiInput').value.trim();
+  const msg=document.getElementById('aiMsg');
+  if(!url){msg.innerHTML='<span style="color:#dc2626">URLを入力してください</span>';return;}
+  localStorage.setItem(SK_A,url);
+  aiURL=url;
+  msg.innerHTML='<span style="color:#0D9488">⏳ 接続テスト中...</span>';
+  try{
+    const res=await fetch(url,{method:'GET'});
+    if(res.ok){
+      const data=await res.json();
+      if(data.status==='ok'){
+        msg.innerHTML='<span style="color:#059669;font-weight:700">✅ 接続成功！AI読み取りが使えます</span>';
+      }else{
+        msg.innerHTML='<span style="color:#dc2626">⚠️ レスポンス異常: '+(data.message||'')+'</span>';
+      }
+    }else{
+      msg.innerHTML='<span style="color:#d97706">⚠️ HTTP '+res.status+'</span>';
+    }
+  }catch(e){
+    msg.innerHTML='<span style="color:#d97706">⚠️ URLを保存しました（接続テスト失敗: '+e.message+'）</span>';
+  }
+}
+
 async function saveGAS(){
   const url=document.getElementById('gasInput').value.trim();
   if(!url){document.getElementById('gasMsg').textContent='URLを入力してください';return;}
