@@ -40,8 +40,13 @@ summary::-webkit-details-marker{display:none}
 .shop-i{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0}
 .shop-n{font-size:11px;font-weight:700;color:#1F2937}
 .shop-btn.on .shop-n{color:#7C3AED}
-.up-c{border:2.5px dashed #94A3B8;border-radius:18px;padding:30px 18px;text-align:center;background:#F8FAFC;cur
-      <!-- ヘッダー -->
+.up-c{border:2.5px dashed #94A3B8;border-radius:18px;padding:30px 18px;text-align:center;background:#F8FAFC;cursor:pointer}
+.up-c:active{background:#EFF6FF;border-color:#065F46}
+.pill{background:#fff;border-radius:18px;padding:9px 14px;font-size:13px;font-weight:600;color:#065F46;border:1.5px solid #A7F3D0}
+.toast{position:fixed;top:30%;left:50%;transform:translateX(-50%);background:rgba(31,41,55,.95);color:#fff;padding:14px 22px;border-radius:14px;font-size:14px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+</style>
+</head>
+<body>
 <div class="head">
   <div class="wrap" style="padding:0 12px;max-width:540px;margin:0 auto">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
@@ -53,18 +58,12 @@ summary::-webkit-details-marker{display:none}
     </div>
   </div>
 </div>
-
 <div class="wrap">
-
-<!-- ==================================================
-     TAB 1: 撮影
-================================================== -->
 <div id="t1" class="fd">
   <div class="card">
     <div style="font-weight:700;font-size:16px;color:#065F46;margin-bottom:12px">① 店舗を選択</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="shopGrid"></div>
   </div>
-
   <div class="card">
     <div style="font-weight:700;font-size:16px;color:#065F46;margin-bottom:10px">② 書類をアップロード</div>
     <div style="background:#F0FDF4;border-radius:8px;padding:10px 12px;font-size:13px;color:#065F46;margin-bottom:12px;line-height:1.7">
@@ -80,17 +79,9 @@ summary::-webkit-details-marker{display:none}
   </div>
   <div id="prog"></div>
 </div>
-
-<!-- ==================================================
-     TAB 2: 確認
-================================================== -->
 <div id="t2" style="display:none" class="fd">
   <div id="chkBox"></div>
 </div>
-
-<!-- ==================================================
-     TAB 3: 一覧
-================================================== -->
 <div id="t3" style="display:none" class="fd">
   <div class="card">
     <div style="display:flex;gap:8px;margin-bottom:10px">
@@ -101,12 +92,7 @@ summary::-webkit-details-marker{display:none}
   </div>
   <div id="listBox"></div>
 </div>
-
-<!-- ==================================================
-     TAB 4: 設定
-================================================== -->
 <div id="t4" style="display:none" class="fd">
-  <!-- AI URL設定（Cloudflare） -->
   <div class="card" style="border:2px solid #0D9488">
     <div style="font-weight:700;font-size:15px;color:#0D9488;margin-bottom:10px">🤖 AI URL設定（Cloudflare・必須）</div>
     <div style="background:#F0FDFA;border-radius:8px;padding:10px 12px;font-size:13px;color:#0F766E;margin-bottom:12px;line-height:1.7">
@@ -118,8 +104,6 @@ summary::-webkit-details-marker{display:none}
     <button onclick="saveAI()" style="background:#0D9488;color:#fff;width:100%;padding:12px;font-size:14px;margin-bottom:6px">接続テスト＆保存</button>
     <div id="aiMsg" style="font-size:13px;text-align:center;min-height:20px"></div>
   </div>
-
-  <!-- GAS設定 -->
   <div class="card" style="border:2px solid #065F46">
     <div style="font-weight:700;font-size:15px;color:#065F46;margin-bottom:10px">📊 GAS URL設定（書き込み用・必須）</div>
     <div style="background:#FFF7ED;border-radius:8px;padding:10px 12px;font-size:13px;color:#92400E;margin-bottom:12px;line-height:1.7">
@@ -131,17 +115,11 @@ summary::-webkit-details-marker{display:none}
     <button onclick="saveGAS()" style="background:#065F46;color:#fff;width:100%;padding:12px;font-size:14px;margin-bottom:6px">接続テスト＆保存</button>
     <div id="gasMsg" style="font-size:13px;text-align:center;min-height:20px"></div>
   </div>
-
-  <!-- 自動保存 -->
   <div class="card" style="background:linear-gradient(135deg,#065F46,#047857);color:#fff">
     <div style="font-size:13px;color:#A7F3D0;margin-bottom:2px">✅ 自動保存が有効</div>
     <div style="font-weight:700;font-size:17px">閉じても消えません（ブラウザに保存）</div>
   </div>
-
-  <!-- データ状況 -->
   <div id="dataInfo" class="card"></div>
-
-  <!-- 仕入れ先DB -->
   <div class="card">
     <div style="font-weight:700;font-size:14px;color:#065F46;margin-bottom:6px">📚 仕入れ先DB（学習済み）</div>
     <div style="font-size:12px;color:#6B7280;margin-bottom:10px">FL科目を修正すると次回から自動振り分けされます</div>
@@ -155,26 +133,18 @@ summary::-webkit-details-marker{display:none}
       <button onclick="addSup()" style="background:#065F46;color:#fff;padding:10px 14px;font-size:13px">追加</button>
     </div>
   </div>
-
   <button onclick="dlCSV()" style="background:#475569;color:#fff;width:100%;padding:14px;font-size:15px;margin-bottom:8px;display:block">⬇️ CSVダウンロード</button>
   <button onclick="dlJSON()" style="background:#64748B;color:#fff;width:100%;padding:14px;font-size:15px;margin-bottom:8px;display:block">💾 全データJSONバックアップ</button>
   <button onclick="clearAll()" style="background:#DC2626;color:#fff;width:100%;padding:14px;font-size:15px">🗑️ 全データ削除（取消不可）</button>
 </div>
-
 </div>
-
-<!-- 下部ナビ -->
 <nav class="bnav">
   <div class="bn on" id="b1" onclick="goTab(1)"><span class="i">📸</span>撮影</div>
   <div class="bn" id="b2" onclick="goTab(2)"><span class="i">✅</span>確認<span id="pendBnBadge" style="display:none"></span></div>
   <div class="bn" id="b3" onclick="goTab(3)"><span class="i">📋</span>一覧</div>
-  <div class="bn" id="b4" onclick="goTab(4)"><span class="i">📊</span>集計</div>
-  <div class="bn" id="b5" onclick="goTab(4)"><span class="i">⚙️</span>設定</div>
+  <div class="bn" id="b4" onclick="goTab(4)"><span class="i">⚙️</span>設定</div>
 </nav>
-  <script>
-// ============================================================
-// 定数
-// ============================================================
+<script>
 const SHOPS=[
   {id:'sunagawa',n:'すながわ製麺所',s:'砂',c:'#7C3AED'},
   {id:'matsuyama',n:'リップル松山店',s:'松',c:'#059669'},
@@ -183,20 +153,10 @@ const SHOPS=[
   {id:'ushiichi',n:'深夜焼肉うしいち',s:'牛',c:'#DC2626'},
 ];
 const TAX_ACCOUNTS=['売上原価（食材）','売上原価（酒類）','給料賃金','雑給(タイミー)','消耗品費','備品費','水道光熱費','地代家賃','通信費','広告宣伝費','接待交際費','雑費'];
-const DEF_SUP={
-  'AT':'drink','AT酒':'drink','ジーマ酒':'drink','酒マート':'drink','かねひで':'drink','マックスバリュ':'drink','オリシャン屋':'drink',
-  'ジーマ雑費':'other','ジーマ':'drink',
-  '長嶺食品':'food','長嶺':'food','AIWA':'food','アイワ':'food','ミートショップ琉球':'food','ミートショップ':'food','平良製麺所':'food','平良':'food','西原商会':'food','西原':'food','エープライス':'food',
-  'タイミー':'labor',
-};
+const DEF_SUP={'AT':'drink','AT酒':'drink','ジーマ酒':'drink','酒マート':'drink','かねひで':'drink','マックスバリュ':'drink','オリシャン屋':'drink','ジーマ雑費':'other','ジーマ':'drink','長嶺食品':'food','長嶺':'food','AIWA':'food','アイワ':'food','ミートショップ琉球':'food','ミートショップ':'food','平良製麺所':'food','平良':'food','西原商会':'food','西原':'food','エープライス':'food','タイミー':'labor'};
 const FL_NAMES={food:'フード(F)',drink:'ドリンク(D)',labor:'人件費(L)',other:'その他'};
-const SK='ripple_v10'; const SK_S='ripple_sup10'; const SK_G='ripple_gas10'; const SK_A='ripple_ai10';
-let selShop=SHOPS[0].id, recs=[], pend=[], supDB={...DEF_SUP}, gasURL='', aiURL='';
-let curTab=1;
-
-// ============================================================
-// 初期化
-// ============================================================
+const SK='ripple_v10', SK_S='ripple_sup10', SK_G='ripple_gas10', SK_A='ripple_ai10';
+let selShop=SHOPS[0].id, recs=[], pend=[], supDB={...DEF_SUP}, gasURL='', aiURL='', curTab=1;
 window.addEventListener('DOMContentLoaded',()=>{
   try{
     const saved=localStorage.getItem(SK);
@@ -210,53 +170,34 @@ window.addEventListener('DOMContentLoaded',()=>{
   }catch(e){console.error(e)}
   renderShops(); renderFilters(); renderSupDB(); updBadge(); updDataInfo();
 });
-
 function renderShops(){
-  const g=document.getElementById('shopGrid');
-  g.innerHTML=SHOPS.map(s=>`
-    <div class="shop-btn ${selShop===s.id?'on':''}" onclick="selectShop('${s.id}')">
-      <div class="shop-i" style="background:${s.c}">${s.s}</div>
-      <div class="shop-n">${s.n}</div>
-    </div>`).join('');
+  document.getElementById('shopGrid').innerHTML=SHOPS.map(s=>`<div class="shop-btn ${selShop===s.id?'on':''}" onclick="selectShop('${s.id}')"><div class="shop-i" style="background:${s.c}">${s.s}</div><div class="shop-n">${s.n}</div></div>`).join('');
 }
 function selectShop(id){selShop=id;renderShops();}
-
 function renderFilters(){
-  const fS=document.getElementById('fShop');
-  fS.innerHTML='<option value="">全店舗</option>'+SHOPS.map(s=>`<option value="${s.id}">${s.n}</option>`).join('');
-  const fM=document.getElementById('fMon');
-  const now=new Date(); const cy=now.getFullYear();
+  document.getElementById('fShop').innerHTML='<option value="">全店舗</option>'+SHOPS.map(s=>`<option value="${s.id}">${s.n}</option>`).join('');
+  const now=new Date(), cy=now.getFullYear();
   let opts='<option value="">全月</option>';
   for(let y=cy;y>=cy-1;y--) for(let m=1;m<=12;m++) opts+=`<option value="${y}-${String(m).padStart(2,'0')}">${y}年${m}月</option>`;
-  fM.innerHTML=opts;
+  document.getElementById('fMon').innerHTML=opts;
 }
-
-// ============================================================
-// タブ切替
-// ============================================================
 function goTab(n){
   curTab=n;
   for(let i=1;i<=4;i++){
     document.getElementById('t'+i).style.display=(i===n?'block':'none');
     document.getElementById('b'+i).classList.toggle('on',i===n);
   }
-  document.getElementById('b5').classList.toggle('on',n===4);
   if(n===2) renderCheck();
   if(n===3) renderList();
   if(n===4){renderSupDB();updDataInfo();}
 }
 function updBadge(){
   const n=pend.filter(p=>p.ok===null).length;
-  const b=document.getElementById('pendBadge');
-  const nE=document.getElementById('pendN');
+  const b=document.getElementById('pendBadge'), nE=document.getElementById('pendN');
   if(n>0){b.style.display='inline-flex';nE.textContent=n;}else{b.style.display='none';}
   const bb=document.getElementById('pendBnBadge');
   if(n>0){bb.style.display='inline-block';bb.style.cssText='display:inline-block;background:#f59e0b;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:2px;font-weight:700';bb.textContent=n;}else{bb.style.display='none';}
 }
-
-// ============================================================
-// 画像→JPEG変換
-// ============================================================
 async function toJpeg(file){
   if(file.type==='application/pdf'){
     return new Promise((res,rej)=>{
@@ -274,9 +215,9 @@ async function toJpeg(file){
       let w=img.naturalWidth, h=img.naturalHeight;
       if(w>MAX||h>MAX){const r=Math.min(MAX/w,MAX/h);w=Math.round(w*r);h=Math.round(h*r);}
       const c=document.createElement('canvas');
-      c.width=w; c.height=h;
+      c.width=w;c.height=h;
       const ctx=c.getContext('2d');
-      ctx.fillStyle='#fff'; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
       ctx.drawImage(img,0,0,w,h);
       URL.revokeObjectURL(url);
       const d=c.toDataURL('image/jpeg',.85);
@@ -292,54 +233,24 @@ async function toJpeg(file){
     img.src=url;
   });
 }
-
-// ============================================================
-// AI呼び出し（Cloudflare経由）
-// ============================================================
 async function callAI(file){
   if(!aiURL) throw new Error('AI URL（Cloudflare）が設定されていません。設定タブで設定してください。');
   const img=await toJpeg(file);
-  const res=await fetch(aiURL,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({imageB64:img.b64,mimeType:img.mt})
-  });
+  const res=await fetch(aiURL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageB64:img.b64,mimeType:img.mt})});
   if(!res.ok) throw new Error(`通信エラー(${res.status})`);
   const data=await res.json();
   if(data.status!=='ok') throw new Error(data.message||'AI読み取り失敗');
   return data.result;
 }
-
-// ============================================================
-// パース結果 → アイテム配列
-// ============================================================
 function parseResult(r,fname){
   const items=r.items?r.items:[r];
   return items.map(it=>{
     const sup=it.supplier||'';
     let flType='other';
     for(const[k,v]of Object.entries(supDB)){if(sup.includes(k)){flType=v;break;}}
-    return {
-      sid:selShop,
-      sname:SHOPS.find(s=>s.id===selShop).n,
-      date:it.date||'',
-      supplier:sup,
-      desc:it.desc||'',
-      tax_account:it.tax_account||'雑費',
-      excl:it.amount_excl||0,
-      tax:it.tax||0,
-      total:it.total||0,
-      dtype:it.dtype||r.dtype||'領収書',
-      flType,
-      src:fname||'',
-      ok:null,
-    };
+    return {sid:selShop,sname:SHOPS.find(s=>s.id===selShop).n,date:it.date||'',supplier:sup,desc:it.desc||'',tax_account:it.tax_account||'雑費',excl:it.amount_excl||0,tax:it.tax||0,total:it.total||0,dtype:it.dtype||r.dtype||'領収書',flType,src:fname||'',ok:null};
   });
 }
-
-// ============================================================
-// ファイルアップロード
-// ============================================================
 async function onFile(ev){
   const files=Array.from(ev.target.files);
   ev.target.value='';
@@ -351,8 +262,7 @@ async function onFile(ev){
     document.getElementById('progN').textContent=`${i+1}/${files.length}`;
     try{
       const r=await callAI(files[i]);
-      const items=parseResult(r,files[i].name);
-      pend.push(...items);
+      pend.push(...parseResult(r,files[i].name));
       okN++;
     }catch(e){
       console.error(e);
@@ -364,116 +274,37 @@ async function onFile(ev){
   goTab(2);
   showToast(`${okN}/${files.length}枚 読み取り完了`);
 }
-
-function showToast(msg){
-  const t=document.createElement('div');
-  t.className='toast'; t.textContent=msg;
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),2200);
-}
-  // ============================================================
-// 確認画面
-// ============================================================
+function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}
 function renderCheck(){
   const box=document.getElementById('chkBox');
-  if(pend.length===0){
-    box.innerHTML='<div class="card" style="text-align:center;padding:40px 20px;color:#94A3B8"><div style="font-size:48px;margin-bottom:10px">📭</div>確認待ちのデータはありません</div>';
-    return;
-  }
+  if(pend.length===0){box.innerHTML='<div class="card" style="text-align:center;padding:40px 20px;color:#94A3B8"><div style="font-size:48px;margin-bottom:10px">📭</div>確認待ちのデータはありません</div>';return;}
   const okN=pend.filter(p=>p.ok===true).length;
   const ngN=pend.filter(p=>p.ok===false).length;
   const wtN=pend.filter(p=>p.ok===null).length;
-  let h=`<div class="card" style="background:linear-gradient(135deg,#1A3A5C,#2D5A87);color:#fff">
-    <div style="font-size:13px;color:#A7F3D0;margin-bottom:4px">AI読み取り結果を確認してください</div>
-    <div style="font-size:28px;font-weight:800;margin-bottom:8px">${pend.length}件</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <span class="pill" style="background:rgba(167,243,208,.2);color:#A7F3D0;border-color:rgba(167,243,208,.3)">✅${okN}件承認</span>
-      <span class="pill" style="background:rgba(252,165,165,.2);color:#FCA5A5;border-color:rgba(252,165,165,.3)">❌${ngN}件却下</span>
-      <span class="pill" style="background:rgba(253,224,71,.2);color:#FDE047;border-color:rgba(253,224,71,.3)">⏳${wtN}件未確認</span>
-    </div></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-      <button onclick="allOK()" style="background:#065F46;color:#fff;padding:13px">✅ 全て承認</button>
-      <button onclick="allNG()" style="background:#64748B;color:#fff;padding:13px">✕ 全てスキップ</button>
-    </div>`;
+  let h=`<div class="card" style="background:linear-gradient(135deg,#1A3A5C,#2D5A87);color:#fff"><div style="font-size:13px;color:#A7F3D0;margin-bottom:4px">AI読み取り結果を確認してください</div><div style="font-size:28px;font-weight:800;margin-bottom:8px">${pend.length}件</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill" style="background:rgba(167,243,208,.2);color:#A7F3D0;border-color:rgba(167,243,208,.3)">✅${okN}件承認</span><span class="pill" style="background:rgba(252,165,165,.2);color:#FCA5A5;border-color:rgba(252,165,165,.3)">❌${ngN}件却下</span><span class="pill" style="background:rgba(253,224,71,.2);color:#FDE047;border-color:rgba(253,224,71,.3)">⏳${wtN}件未確認</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px"><button onclick="allOK()" style="background:#065F46;color:#fff;padding:13px">✅ 全て承認</button><button onclick="allNG()" style="background:#64748B;color:#fff;padding:13px">✕ 全てスキップ</button></div>`;
   pend.forEach((p,i)=>{
     const sn=SHOPS.find(s=>s.id===p.sid);
     const flCls={food:'tag-f',drink:'tag-d',labor:'tag-l',other:'tag-o'}[p.flType];
     const missDate=!p.date, missSup=!p.supplier, missTotal=!p.total||p.total===0;
-    h+=`<div class="card" style="${p.ok===true?'border:2px solid #065F46':p.ok===false?'opacity:.5':''}">
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-        <span class="tag" style="background:${sn.c}20;color:${sn.c}">${sn.n}</span>
-        <span class="tag tag-${p.dtype==='エラー'?'er':'ok'}">${p.dtype}</span>
-        <span class="tag ${flCls}">${FL_NAMES[p.flType]||'その他'}</span>
-        ${missTotal?'<span class="tag tag-er">金額未入力</span>':''}
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-        <div><label style="font-size:11px;color:#6B7280">⚠️ 日付${missDate?'（要入力）':''}</label>
-          <input type="date" value="${p.date}" onchange="updP(${i},'date',this.value)" class="${missDate?'miss':''}" style="font-size:13px;padding:8px"></div>
-        <div><label style="font-size:11px;color:#6B7280">店舗</label>
-          <select onchange="updP(${i},'sid',this.value)" style="font-size:13px;padding:8px">
-            ${SHOPS.map(s=>`<option value="${s.id}" ${p.sid===s.id?'selected':''}>${s.n}</option>`).join('')}
-          </select></div>
-      </div>
-      <div style="margin-bottom:10px"><label style="font-size:11px;color:#6B7280">⚠️ 取引先${missSup?'（要入力）':''}</label>
-        <input type="text" value="${p.supplier}" onchange="updP(${i},'supplier',this.value)" placeholder="取引先名を入力" class="${missSup?'miss':''}" style="font-size:14px"></div>
-      <div style="margin-bottom:10px"><label style="font-size:11px;color:#6B7280">但し書き・内容</label>
-        <input type="text" value="${p.desc}" onchange="updP(${i},'desc',this.value)" style="font-size:13px"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-        <div><label style="font-size:11px;color:#6B7280">⭐ FL科目（修正→学習）</label>
-          <select onchange="updFL(${i},this.value)" style="font-size:13px;padding:8px">
-            <option value="food" ${p.flType==='food'?'selected':''}>📦 フード(F)</option>
-            <option value="drink" ${p.flType==='drink'?'selected':''}>🍺 ドリンク(D)</option>
-            <option value="labor" ${p.flType==='labor'?'selected':''}>👤 人件費(L)</option>
-            <option value="other" ${p.flType==='other'?'selected':''}>📦 その他（FL除外）</option>
-          </select></div>
-        <div><label style="font-size:11px;color:#6B7280">⚠️ 税込金額${missTotal?'（要入力）':''}</label>
-          <input type="number" value="${p.total||0}" onchange="updTotal(${i},this.value)" class="${missTotal?'miss':''}" style="font-size:14px;padding:8px;text-align:right"></div>
-      </div>
-      <div style="margin-bottom:10px"><label style="font-size:11px;color:#6B7280">📒 確定申告の勘定科目</label>
-        <select onchange="updP(${i},'tax_account',this.value)" style="font-size:13px;padding:8px">
-          ${TAX_ACCOUNTS.map(t=>`<option value="${t}" ${p.tax_account===t?'selected':''}>${t}</option>`).join('')}
-        </select></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button onclick="setOK(${i},true)" style="background:${p.ok===true?'#065F46':'#E2E8F0'};color:${p.ok===true?'#fff':'#374151'};padding:13px;font-weight:700">✅ 正しい (O)</button>
-        <button onclick="setOK(${i},false)" style="background:${p.ok===false?'#64748B':'#E2E8F0'};color:${p.ok===false?'#fff':'#374151'};padding:13px;font-weight:700">✕ スキップ (×)</button>
-      </div>
-    </div>`;
+    h+=`<div class="card" style="${p.ok===true?'border:2px solid #065F46':p.ok===false?'opacity:.5':''}"><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><span class="tag" style="background:${sn.c}20;color:${sn.c}">${sn.n}</span><span class="tag tag-${p.dtype==='エラー'?'er':'ok'}">${p.dtype}</span><span class="tag ${flCls}">${FL_NAMES[p.flType]||'その他'}</span>${missTotal?'<span class="tag tag-er">金額未入力</span>':''}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px"><div><label style="font-size:11px;color:#6B7280">⚠️ 日付${missDate?'（要入力）':''}</label><input type="date" value="${p.date}" onchange="updP(${i},'date',this.value)" class="${missDate?'miss':''}" style="font-size:13px;padding:8px"></div><div><label style="font-size:11px;color:#6B7280">店舗</label><select onchange="updP(${i},'sid',this.value)" style="font-size:13px;padding:8px">${SHOPS.map(s=>`<option value="${s.id}" ${p.sid===s.id?'selected':''}>${s.n}</option>`).join('')}</select></div></div><div style="margin-bottom:10px"><label style="font-size:11px;color:#6B7280">⚠️ 取引先${missSup?'（要入力）':''}</label><input type="text" value="${p.supplier}" onchange="updP(${i},'supplier',this.value)" placeholder="取引先名を入力" class="${missSup?'miss':''}" style="font-size:14px"></div><div style="margin-bottom:10px"><label style="font-size:11px;color:#6B7280">但し書き・内容</label><input type="text" value="${p.desc}" onchange="updP(${i},'desc',this.value)" style="font-size:13px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px"><div><label style="font-size:11px;color:#6B7280">⭐ FL科目（修正→学習）</label><select onchange="updFL(${i},this.value)" style="font-size:13px;padding:8px"><option value="food" ${p.flType==='food'?'selected':''}>📦 フード(F)</option><option value="drink" ${p.flType==='drink'?'selected':''}>🍺 ドリンク(D)</option><option value="labor" ${p.flType==='labor'?'selected':''}>👤 人件費(L)</option><option value="other" ${p.flType==='other'?'selected':''}>📦 その他（FL除外）</option></select></div><div><label style="font-size:11px;color:#6B7280">⚠️ 税込金額${missTotal?'（要入力）':''}</label><input type="number" value="${p.total||0}" onchange="updTotal(${i},this.value)" class="${missTotal?'miss':''}" style="font-size:14px;padding:8px;text-align:right"></div></div><div style="margin-bottom:10px"><label style="font-size:11px;color:#6B7280">📒 確定申告の勘定科目</label><select onchange="updP(${i},'tax_account',this.value)" style="font-size:13px;padding:8px">${TAX_ACCOUNTS.map(t=>`<option value="${t}" ${p.tax_account===t?'selected':''}>${t}</option>`).join('')}</select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button onclick="setOK(${i},true)" style="background:${p.ok===true?'#065F46':'#E2E8F0'};color:${p.ok===true?'#fff':'#374151'};padding:13px;font-weight:700">✅ 正しい (O)</button><button onclick="setOK(${i},false)" style="background:${p.ok===false?'#64748B':'#E2E8F0'};color:${p.ok===false?'#fff':'#374151'};padding:13px;font-weight:700">✕ スキップ (×)</button></div></div>`;
   });
-  if(okN>0){
-    h+=`<div class="card" style="position:sticky;bottom:80px;background:#fff;border:2px solid #065F46">
-      <button onclick="sendOK()" style="width:100%;padding:18px;background:linear-gradient(135deg,#065F46,#0D9488);color:#fff;border:none;border-radius:14px;font-size:17px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 4px 20px rgba(6,95,70,.5)">
-      <span style="font-size:26px">📊</span>
-      <span>✅ ${okN}件を${gasURL?'スプレッドシートに反映':'ローカル保存'}</span>
-    </button>
-  </div>`;
-  }
+  if(okN>0){h+=`<div class="card" style="position:sticky;bottom:80px;background:#fff;border:2px solid #065F46"><button onclick="sendOK()" style="width:100%;padding:18px;background:linear-gradient(135deg,#065F46,#0D9488);color:#fff;border:none;border-radius:14px;font-size:17px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 4px 20px rgba(6,95,70,.5)"><span style="font-size:26px">📊</span><span>✅ ${okN}件を${gasURL?'スプレッドシートに反映':'ローカル保存'}</span></button></div>`;}
   box.innerHTML=h;
 }
-
-function setOK(idx,v){ pend[idx].ok=v; updBadge(); renderCheck(); }
-function updP(idx,k,v){ pend[idx][k]=v; }
-function updTotal(idx,v){ const t=Number(v)||0; pend[idx].total=t; pend[idx].excl=Math.floor(t/1.1); pend[idx].tax=t-pend[idx].excl; renderCheck(); }
-function updFL(idx,v){ pend[idx].flType=v; if(pend[idx].supplier){supDB[pend[idx].supplier]=v; localStorage.setItem(SK_S,JSON.stringify(supDB));} renderCheck(); }
-function allOK(){ pend.forEach(p=>{if(p.ok===null)p.ok=true;}); updBadge(); renderCheck(); }
-function allNG(){ pend.forEach(p=>{if(p.ok===null)p.ok=false;}); updBadge(); renderCheck(); }
-
-// ============================================================
-// 確認OK → スプレッドシート送信
-// ============================================================
+function setOK(idx,v){pend[idx].ok=v;updBadge();renderCheck();}
+function updP(idx,k,v){pend[idx][k]=v;}
+function updTotal(idx,v){const t=Number(v)||0;pend[idx].total=t;pend[idx].excl=Math.floor(t/1.1);pend[idx].tax=t-pend[idx].excl;renderCheck();}
+function updFL(idx,v){pend[idx].flType=v;if(pend[idx].supplier){supDB[pend[idx].supplier]=v;localStorage.setItem(SK_S,JSON.stringify(supDB));}renderCheck();}
+function allOK(){pend.forEach(p=>{if(p.ok===null)p.ok=true;});updBadge();renderCheck();}
+function allNG(){pend.forEach(p=>{if(p.ok===null)p.ok=false;});updBadge();renderCheck();}
 async function sendOK(){
   const apr=pend.filter(p=>p.ok===true);
   if(apr.length===0){showToast('承認データがありません');return;}
   if(gasURL){
     showToast('送信中...');
     try{
-      const res=await fetch(gasURL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body:JSON.stringify({action:'addRecords',records:apr.map(r=>({
-          sid:r.sid,sname:r.sname,date:r.date,supplier:r.supplier,desc:r.desc,
-          tax_account:r.tax_account,excl:r.excl,tax:r.tax,total:r.total,
-          dtype:r.dtype,flType:r.flType,src:r.src
-        }))})
-      });
-    }catch(e){console.error('GAS送信エラー（ローカル保存のみ実行）:',e);}
+      await fetch(gasURL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'addRecords',records:apr.map(r=>({sid:r.sid,sname:r.sname,date:r.date,supplier:r.supplier,desc:r.desc,tax_account:r.tax_account,excl:r.excl,tax:r.tax,total:r.total,dtype:r.dtype,flType:r.flType,src:r.src}))})});
+    }catch(e){console.error('GAS送信エラー:',e);}
   }
   recs.push(...apr.map(p=>({...p,ts:Date.now()})));
   localStorage.setItem(SK,JSON.stringify(recs));
@@ -483,42 +314,16 @@ async function sendOK(){
   if(pend.length===0) goTab(3); else renderCheck();
   updDataInfo();
 }
-
-// ============================================================
-// 一覧
-// ============================================================
 function renderList(){
   const fS=document.getElementById('fShop').value;
   const fM=document.getElementById('fMon').value;
-  const filt=recs.filter(r=>{
-    if(fS&&r.sid!==fS)return false;
-    if(fM&&!r.date.startsWith(fM))return false;
-    return true;
-  }).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const filt=recs.filter(r=>{if(fS&&r.sid!==fS)return false;if(fM&&!r.date.startsWith(fM))return false;return true;}).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   const total=filt.reduce((s,r)=>s+(r.total||0),0);
   document.getElementById('listSum').innerHTML=`<b>${filt.length}件</b> / 合計 <b>¥${total.toLocaleString()}</b>`;
   const box=document.getElementById('listBox');
   if(filt.length===0){box.innerHTML='<div class="card" style="text-align:center;padding:30px;color:#94A3B8">データなし</div>';return;}
-  box.innerHTML=filt.map(r=>{
-    const sn=SHOPS.find(s=>s.id===r.sid);
-    return `<div class="card">
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-        <span class="tag" style="background:${sn?.c||'#888'}20;color:${sn?.c||'#888'}">${r.sname}</span>
-        <span style="font-size:12px;color:#6B7280">${r.date}</span>
-      </div>
-      <div style="font-weight:700;font-size:15px;margin-bottom:4px">${r.supplier}</div>
-      <div style="font-size:12px;color:#6B7280;margin-bottom:6px">${r.desc||''}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span class="tag tag-${r.flType==='food'?'f':r.flType==='drink'?'d':r.flType==='labor'?'l':'o'}">${FL_NAMES[r.flType]}</span>
-        <span style="font-size:16px;font-weight:700">¥${(r.total||0).toLocaleString()}</span>
-      </div>
-    </div>`;
-  }).join('');
+  box.innerHTML=filt.map(r=>{const sn=SHOPS.find(s=>s.id===r.sid);return `<div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span class="tag" style="background:${sn?.c||'#888'}20;color:${sn?.c||'#888'}">${r.sname}</span><span style="font-size:12px;color:#6B7280">${r.date}</span></div><div style="font-weight:700;font-size:15px;margin-bottom:4px">${r.supplier}</div><div style="font-size:12px;color:#6B7280;margin-bottom:6px">${r.desc||''}</div><div style="display:flex;justify-content:space-between;align-items:center"><span class="tag tag-${r.flType==='food'?'f':r.flType==='drink'?'d':r.flType==='labor'?'l':'o'}">${FL_NAMES[r.flType]}</span><span style="font-size:16px;font-weight:700">¥${(r.total||0).toLocaleString()}</span></div></div>`;}).join('');
 }
-
-// ============================================================
-// 設定
-// ============================================================
 async function saveAI(){
   const url=document.getElementById('aiInput').value.trim();
   const msg=document.getElementById('aiMsg');
@@ -530,19 +335,11 @@ async function saveAI(){
     const res=await fetch(url,{method:'GET'});
     if(res.ok){
       const data=await res.json();
-      if(data.status==='ok'){
-        msg.innerHTML='<span style="color:#059669;font-weight:700">✅ 接続成功！AI読み取りが使えます</span>';
-      }else{
-        msg.innerHTML='<span style="color:#dc2626">⚠️ レスポンス異常: '+(data.message||'')+'</span>';
-      }
-    }else{
-      msg.innerHTML='<span style="color:#d97706">⚠️ HTTP '+res.status+'</span>';
-    }
-  }catch(e){
-    msg.innerHTML='<span style="color:#d97706">⚠️ URLを保存しました（接続テスト失敗: '+e.message+'）</span>';
-  }
+      if(data.status==='ok'){msg.innerHTML='<span style="color:#059669;font-weight:700">✅ 接続成功！AI読み取りが使えます</span>';}
+      else{msg.innerHTML='<span style="color:#dc2626">⚠️ レスポンス異常: '+(data.message||'')+'</span>';}
+    }else{msg.innerHTML='<span style="color:#d97706">⚠️ HTTP '+res.status+'</span>';}
+  }catch(e){msg.innerHTML='<span style="color:#d97706">⚠️ URLを保存しました（接続テスト失敗: '+e.message+'）</span>';}
 }
-
 async function saveGAS(){
   const url=document.getElementById('gasInput').value.trim();
   const msg=document.getElementById('gasMsg');
@@ -551,39 +348,24 @@ async function saveGAS(){
   gasURL=url;
   msg.innerHTML='<span style="color:#d97706">⚠️ URLを保存しました（デプロイ後に再テスト）</span>';
 }
-
 function renderSupDB(){
   const box=document.getElementById('supDB');
   if(!box)return;
   const items=Object.entries(supDB).slice(0,30);
-  box.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:4px">'+items.map(([k,v])=>{
-    const cls=v==='food'?'tag-f':v==='drink'?'tag-d':v==='labor'?'tag-l':'tag-o';
-    return `<span class="tag ${cls}">${k}</span>`;
-  }).join('')+'</div>';
+  box.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:4px">'+items.map(([k,v])=>{const cls=v==='food'?'tag-f':v==='drink'?'tag-d':v==='labor'?'tag-l':'tag-o';return `<span class="tag ${cls}">${k}</span>`;}).join('')+'</div>';
 }
 function addSup(){
   const n=document.getElementById('newSupName').value.trim();
   const fl=document.getElementById('newSupFL').value;
   if(!n)return;
-  supDB[n]=fl; localStorage.setItem(SK_S,JSON.stringify(supDB));
+  supDB[n]=fl;localStorage.setItem(SK_S,JSON.stringify(supDB));
   document.getElementById('newSupName').value='';
   renderSupDB();
   showToast('追加しました');
 }
 function updDataInfo(){
   const total=recs.reduce((s,r)=>s+(r.total||0),0);
-  document.getElementById('dataInfo').innerHTML=`
-    <div style="font-weight:700;font-size:14px;color:#065F46;margin-bottom:10px">💾 データ状況</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div style="background:#F0FDF4;padding:12px;border-radius:8px;text-align:center">
-        <div style="font-size:11px;color:#6B7280">登録件数</div>
-        <div style="font-size:22px;font-weight:700;color:#065F46">${recs.length}</div>
-      </div>
-      <div style="background:#EFF6FF;padding:12px;border-radius:8px;text-align:center">
-        <div style="font-size:11px;color:#6B7280">合計金額</div>
-        <div style="font-size:18px;font-weight:700;color:#1E40AF">¥${total.toLocaleString()}</div>
-      </div>
-    </div>`;
+  document.getElementById('dataInfo').innerHTML=`<div style="font-weight:700;font-size:14px;color:#065F46;margin-bottom:10px">💾 データ状況</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="background:#F0FDF4;padding:12px;border-radius:8px;text-align:center"><div style="font-size:11px;color:#6B7280">登録件数</div><div style="font-size:22px;font-weight:700;color:#065F46">${recs.length}</div></div><div style="background:#EFF6FF;padding:12px;border-radius:8px;text-align:center"><div style="font-size:11px;color:#6B7280">合計金額</div><div style="font-size:18px;font-weight:700;color:#1E40AF">¥${total.toLocaleString()}</div></div></div>`;
 }
 function dlCSV(){
   if(recs.length===0){showToast('データなし');return;}
@@ -607,8 +389,8 @@ function dlJSON(){
 function clearAll(){
   if(!confirm('全データを削除します。本当によろしいですか？'))return;
   if(!confirm('もう一度確認：取消できません。本当に削除しますか？'))return;
-  recs=[]; pend=[]; localStorage.removeItem(SK);
-  updBadge(); updDataInfo();
+  recs=[];pend=[];localStorage.removeItem(SK);
+  updBadge();updDataInfo();
   showToast('全データを削除しました');
 }
 </script>
